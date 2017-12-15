@@ -1,0 +1,48 @@
+{
+  "name": "api_example",
+  "version": "0.0.0",
+  "author": "moalmeida <moalmeida@koinosystems.com>",
+  "license": "UNLICENSED",
+  "private": true,
+  "engines": {
+    "node": ">= 8"
+  },
+  "env": {
+    "PORT": 8888,
+    "NODE_ENV": "development"
+  },
+  "scripts": {
+    "lint": "gulp lint",
+    "test": "gulp test",
+    "codacy": "gulp codacy",
+    "start": "node app/src/index.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "bluebird": "^3.5.0",
+    "body-parser": "^1.17.2",
+    "compression": "^1.6.2",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.15.3",
+    "express-sanitizer": "^1.0.2",
+    "express-session": "^1.15.6",
+    "helmet": "^3.6.1",
+    "jsonwebtoken": "^8.1.0",
+    "mongoose": "^4.10.4",
+    "passport": "^0.4.0",
+    "passport-jwt": "^3.0.1",
+    "redis": "^2.7.1"
+  },
+  "devDependencies": {
+    "eslint": "^4.12.0",
+    "eslint-plugin-jasmine": "^2.9.1",
+    "eslint-plugin-node": "^5.2.1",
+    "gulp": "^3.9.1",
+    "gulp-codacy": "^1.0.0",
+    "gulp-eslint": "^4.0.0",
+    "gulp-istanbul": "^1.1.2",
+    "gulp-jasmine": "^2.4.2",
+    "gulp-sequence": "^0.4.6",
+    "rewire": "^3.0.2"
+  }
+}

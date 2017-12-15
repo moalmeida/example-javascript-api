@@ -1,0 +1,46 @@
+version: '2'
+services:
+  cache:
+    restart: always
+    image: redis:3-alpine
+    volumes:
+     - cache_data:/data
+    expose:
+     - 6379
+    ports:
+     - 6379
+  nosql:
+    restart: always
+    image: moalmeida/docker-mongo:0.0.0
+    volumes:
+     - nosql_data:/data/db
+    command: mongod --smallfiles
+    expose:
+     - 27017
+    ports:
+     - 27017
+  api:
+    restart: always
+    build: .
+    environment:
+     - PORT=8888
+     - NODE_ENV=development
+     - CACHE_HOST=cache
+     - CACHE_PORT=6379
+     - NOSQL_HOST=nosql
+     - NOSQL_PORT=27017
+     - NOSQL_DB=example
+    expose:
+     - 8888
+    ports:
+     - 8888:8888
+    depends_on:
+     - cache
+     - nosql
+    links:
+     - cache
+     - nosql
+    privileged: true
+volumes:
+  nosql_data: {}
+  cache_data: {}
