@@ -1,0 +1,19 @@
+{
+    "plugins": ["node", "jasmine"],
+    "extends": ["eslint:recommended", "plugin:node/recommended", "plugin:jasmine/recommended"],
+    "env": {
+      jasmine: true,
+      "es6": true,
+    },
+    "parserOptions": {
+      "ecmaVersion": 2017,
+    },
+    "settings": {
+        "node": {
+            "allowModules": ["rewire", "gulp", "isparta", "gulp-sequence", "gulp-istanbul", "gulp-codacy", "gulp-eslint", "gulp-jasmine"],
+        }
+    },
+    "rules": {
+        "node/exports-style": ["error", "module.exports"],
+    },
+}
