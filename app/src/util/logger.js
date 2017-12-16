@@ -1,12 +1,17 @@
-/* eslint no-console: ["error", { allow: ["log", "error"] }] */
-
 'use strict';
+
+const winston = require('winston');
+const logger = new(winston.Logger)({
+  transports: [
+    new(winston.transports.Console)({handleExceptions: true, json: true}),
+  ]
+});
 
 module.exports = {
   debug: (message) => {
-    console.log(message);
+    logger.log('info', message);
   },
   error: (message) => {
-    console.error(message);
+    logger.log('error', message);
   }
 };
