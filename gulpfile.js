@@ -35,7 +35,7 @@ gulp.task('test', ['istabul-hook'], () => {
 gulp.task('codacy', () => {
   return gulp.src(['coverage/lcov.info'], { read: false })
     .pipe(codacy({
-      token: 'eaa023a763ca449eb03c596a47935cd8'
+      token: '27d208c2ecce424c8899b2cf96a6ff5d'
     }))
   ;
 });

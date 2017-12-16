@@ -10,9 +10,6 @@ describe("routes/count unit test", () => {
       json: (data) => {
         expect(data).toBe(0);
         return;
-      },
-      end: () => {
-        return;
       }
     };
     count.__set__({
@@ -48,9 +45,6 @@ describe("routes/count unit test", () => {
     };
     const res = {
       json: () => {
-        return;
-      },
-      end: () => {
         return;
       }
     };

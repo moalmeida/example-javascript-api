@@ -1,29 +1,34 @@
-/* eslint no-console: ["error", { allow: ["warn", "error"] }] */
-
 'use strict';
 
 const PORT = process.env.PORT || 8888;
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
 const http = require('http');
+const express = require('express');
 
 const app = require('./app');
+const logger = require('./util/logger');
 // const auth = require('./util/auth');
 const database = require('./util/database');
 const todoRoute = require('./routes/todo');
 const countRoute = require('./routes/count');
 const authRoute = require('./routes/auth');
 const healthcheckRoute = require('./routes/healthcheck');
+const v1 = express.Router();
 
-app.get('/healthcheck', healthcheckRoute.get);
-app.get('/todos', todoRoute.get);
-app.get('/count/incremental', countRoute.incremental);
+
+v1.use(app.get('/healthcheck', healthcheckRoute.get));
+v1.use(app.get('/todos', todoRoute.get));
+v1.use(app.get('/count/incremental', countRoute.incremental));
 // app.get('/onlyauthenticated', auth.authenticate(), authRoute.onlyAuthenticated);
-app.post('/authenticate', authRoute.authenticate);
-app.post('/signup', authRoute.signup);
+v1.use(app.post('/authenticate', authRoute.authenticate));
+v1.use(app.post('/signup', authRoute.signup));
+
+app.use('/v1', v1);
+app.use('/', v1);
 
 db_connect().on('error', (e) => {
-  console.error(e);
+  logger.error(e);
 }).on('disconnected', () => {
   return setTimeout(() => {
     db_connect();
@@ -36,7 +41,7 @@ db_connect().on('error', (e) => {
   } else {
     http.createServer(app).listen(PORT, (e) => {
       if (e) {
-        console.error(e);
+        logger.error(e);
       }
     });
   }

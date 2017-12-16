@@ -13,9 +13,6 @@ describe("routes/healthcheck unit test", () => {
         expect(data.todos).toBe(todos);
         expect(data.incremental).toBe(incremental);
         return;
-      },
-      end: () => {
-        return;
       }
     };
     healthcheck.__set__({

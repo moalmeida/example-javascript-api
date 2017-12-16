@@ -16,7 +16,6 @@ const signup = (req, res, next) => {
       return next(err);
     }
     res.status(201).json(data);
-    res.end();
   })
 };
 
@@ -40,7 +39,6 @@ const authenticate = (req, res, next) => {
     } else {
       res.status(401).json({error: "user not found"});
     }
-    res.end();
   });
 };
 
