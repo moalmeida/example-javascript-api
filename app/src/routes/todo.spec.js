@@ -18,7 +18,7 @@ describe("routes/todo unit test", () => {
     };
     todo.__set__({
       Todo: {
-        get: () => {
+        list: () => {
           return new Promise((resolve) => {
             resolve(result);
           });
@@ -45,7 +45,7 @@ describe("routes/todo unit test", () => {
     };
     todo.__set__({
       Todo: {
-        get: () => {
+        list: () => {
           return new Promise((resolve, reject) => {
             reject(message);
           });

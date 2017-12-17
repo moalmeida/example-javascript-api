@@ -3,26 +3,27 @@
 let Todo = require('../service/todo');
 
 const list = (req, res, next) => {
-  return Todo.get().then((data) => {
+  return Todo.list().then((data) => {
     res.json(data);
   }).catch((err) => {
     return next(err);
   })
 };
 
-const get = (req, res, next) => {
-  return Todo.get().then((data) => {
-    res.json(data);
-  }).catch((err) => {
-    return next(err);
-  })
+const get = (req, res) => {
+  if (res.todo) {
+    res.json(res.todo);
+  }
+  res.status(404).end()
 };
 
 const preload = (req, res, next) => {
   if (req.params.todoId) {
-    Todo.findById(req.params.todoId, (err, data) => {
+    return Todo.findById(req.params.todoId).then((data) => {
       req.todo = data;
       next();
+    }).catch((err) => {
+      return next(err);
     });
   } else {
     next();
@@ -30,32 +31,33 @@ const preload = (req, res, next) => {
 };
 
 const put = (req, res, next) => {
-  req.todo.set(req.body);
-  req.todo.save((err, data) => {
-    if (err) {
-      next(err);
-    }
-    res.json(204, data);
-  });
+  if (res.todo) {
+    return Todo.update(res.todo, req.body).then((data) => {
+      res.json(204, data);
+    }).catch((err) => {
+      return next(err);
+    });
+  }
+  res.status(404).end()
 };
 
 const post = (req, res, next) => {
-  let todo = new Todo(req.body);
-  todo.save((err, data) => {
-    if (err) {
-      next(err);
-    }
+  return Todo.save(req.body).then((data) => {
     res.json(201, data);
+  }).catch((err) => {
+    return next(err);
   });
 };
 
 const del = (req, res, next) => {
-  req.todo.remove((err) => {
-    if (err) {
-      next(err);
-    }
-    res.json(204, {});
-  });
+  if (res.todo) {
+    return Todo.remove(res.todo).then(() => {
+      res.json(204, {});
+    }).catch((err) => {
+      return next(err);
+    });
+  }
+  res.status(404).end()
 };
 
 module.exports = {

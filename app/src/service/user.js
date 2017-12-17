@@ -3,6 +3,17 @@
 let Promise = require('bluebird');
 let User = require('../model/user');
 
+const list = () => {
+  return new Promise((resolve, reject) => {
+    return User.find({}, (err, data) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(data);
+    });
+  });
+};
+
 const load = (username, password) => {
   return new Promise((resolve, reject) => {
     return User.findOne({
@@ -13,6 +24,22 @@ const load = (username, password) => {
       }
       if (data && data.local.username === username && data.validPassword(password, data.local.password)) {
         resolve(data);
+      }
+      reject();
+    });
+  });
+};
+
+const isValid = (username) => {
+  return new Promise((resolve, reject) => {
+    return User.findOne({
+      'local.username': username
+    }, (err, data) => {
+      if (err) {
+        reject(err);
+      }
+      if (data && data.local.username === username) {
+        resolve();
       }
       reject();
     });
@@ -33,6 +60,8 @@ const save = (username, password) => {
 };
 
 module.exports = {
+  list,
   load,
-  save
+  save,
+  isValid
 };

@@ -1,32 +1,32 @@
 var rewire = require("rewire");
-var todo = rewire("./todo");
+var user = rewire("./user");
 
-describe("service/todo unit test", () => {
+describe("service/user unit test", () => {
 
   it("should list() without error", () => {
     const result = [{}];
-    todo.__set__({
-      Todo: {
+    user.__set__({
+      User: {
         find: (options, cb) => {
           return cb(null, result);
         }
       }
     });
-    todo.list().then((v) => {
+    user.list().then((v) => {
       expect(v).toBe(result);
     });
   });
 
   it("should list() with error", () => {
     const message = "ERROR";
-    todo.__set__({
-      Todo: {
+    user.__set__({
+      User: {
         find: (options, cb) => {
           return cb(message, null);
         }
       }
     });
-    todo.list().catch((v) => {
+    user.list().catch((v) => {
       expect(v).toBe(message);
     });
   });

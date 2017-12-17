@@ -18,6 +18,8 @@ const authRoute = require('./routes/auth');
 const healthcheckRoute = require('./routes/healthcheck');
 
 app.get('/healthcheck', version('1.x.x'), healthcheckRoute.get);
+app.post('/authenticate', version('1.x.x'), authRoute.authenticate);
+app.post('/signup', version('1.x.x'), authRoute.signup);
 
 app.get('/todos', version('1.x.x'), auth.authenticate(), todoRoute.list);
 app.get('/todo/:todoId', version('1.x.x'), auth.authenticate(), todoRoute.preload, todoRoute.get);
@@ -25,8 +27,6 @@ app.put('/todo/:todoId', version('1.x.x'), auth.authenticate(), todoRoute.preloa
 app.del('/todo/:todoId', version('1.x.x'), auth.authenticate(), todoRoute.preload, todoRoute.del);
 app.post('/todo', version('1.x.x'), auth.authenticate(), todoRoute.post);
 app.get('/count/incremental', version('1.x.x'), auth.authenticate(), countRoute.incremental);
-app.post('/authenticate', version('1.x.x'), authRoute.authenticate);
-app.post('/signup', version('1.x.x'), authRoute.signup);
 
 db_connect().on('error', (e) => {
   logger.error(e);
