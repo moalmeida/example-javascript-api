@@ -4,7 +4,7 @@ var todo = rewire("./todo");
 
 describe("routes/todo unit test", () => {
 
-  it("should incremental() without error", () => {
+  it("should list() without error", () => {
     const result = [{}];
     const req = () => {};
     var res = {
@@ -25,10 +25,10 @@ describe("routes/todo unit test", () => {
         }
       }
     });
-    todo.get(req, res);
+    todo.list(req, res);
   });
 
-  it("should incremental() with exception", () => {
+  it("should list() with exception", () => {
     const message = "ERROR";
     const req = () => {};
     const next = (err) => {
@@ -52,7 +52,7 @@ describe("routes/todo unit test", () => {
         }
       }
     });
-    todo.get(req, res, next);
+    todo.list(req, res, next);
   });
 
 });

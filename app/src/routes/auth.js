@@ -1,7 +1,7 @@
 'use strict';
 
 let jwt = require('jsonwebtoken');
-let User = require('../model/user');
+let user = require('../service/user');
 
 const signup = (req, res, next) => {
   const username = req.body.username;
@@ -9,26 +9,18 @@ const signup = (req, res, next) => {
   if (!username || !password) {
     return next(new Error("invalid signup form"));
   }
-  let user = new User({'local.username': username});
-  user.local.password = user.generateHash(password);
-  user.save((err, data) => {
-    if (err) {
-      return next(err);
-    }
+  return user.save(username, password).then((data) => {
     res.status(201).json(data);
+  }).catch(err => {
+    next(err)
   })
 };
 
 const authenticate = (req, res, next) => {
   const username = req.body.username || '';
   const password = req.body.password || '';
-  User.findOne({
-    'local.username': username
-  }, (err, data) => {
-    if (err) {
-      return next(err);
-    }
-    if (data && data.local.username === username && data.validPassword(password, data.local.password)) {
+  return user.load(username, password).then((data) => {
+    if (data) {
       const payload = {
         username: data.local.username
       };
@@ -37,18 +29,14 @@ const authenticate = (req, res, next) => {
       });
       res.json({token, payload});
     } else {
-      res.status(401).json({error: "user not found"});
+      res.status(401).end();
     }
-  });
+  }).catch(err => {
+    next(err)
+  })
 };
-
-// const onlyAuthenticated = (req, res) => {
-//   res.json({message: "i'm on my way, it works!"});
-//   res.end();
-// };
 
 module.exports = {
   signup,
-  authenticate,
-  // onlyAuthenticated
+  authenticate
 };
