@@ -2,7 +2,7 @@ var User = require("./user");
 
 describe("model/user unit test", () => {
 
-  it("should instanciate without error", (done) => {
+  it("should get new model without error", (done) => {
     const user = new User({
       local: {
         username: 'abc123',
@@ -15,7 +15,7 @@ describe("model/user unit test", () => {
     });
   });
 
-  it("should instanciate with errors", (done) => {
+  it("should get new model with errors", (done) => {
     const user = new User({});
     user.validate((err) => {
       expect(err.errors['local.username']).toBeDefined();
@@ -24,17 +24,19 @@ describe("model/user unit test", () => {
     });
   });
 
-  it("should generateHash()", () => {
+  it("should generateHash() with success", () => {
     const user = new User({
       local: {
         username: 'abc123',
         password: 'abc123'
       }
     });
-    expect(user.generateHash(user.local.password).length).toBe(60);
+    const passwordHash = user.generateHash(user.local.password);
+
+    expect(passwordHash.length).toBe(60);
   });
 
-  it("should validPassword()", () => {
+  it("should validPassword() with success", () => {
     const passwordHash = "$2a$10$QkDjn.Jn0FojgBj0IItM/uFCL6JM8SrstBgzoSZzD1oHDlWm3627W";
     const user = new User({
       local: {
@@ -42,18 +44,9 @@ describe("model/user unit test", () => {
         password: 'abc123'
       }
     });
-    expect(user.validPassword(user.local.password, passwordHash)).toBe(true);
+    const isValid = user.validPassword(user.local.password, passwordHash);
+
+    expect(isValid).toBe(true);
   });
 
 });
-
-// userSchema.methods.generateHash = (password) => {
-//   return bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-// }
-
-// userSchema.methods.validPassword = (arg0, arg1) => {
-//   return bcrypt.compareSync(arg0, arg1);
-// };
-
-// describe("model/user unit test", () => {
-// });

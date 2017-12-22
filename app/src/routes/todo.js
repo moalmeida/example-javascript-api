@@ -10,13 +10,6 @@ const list = (req, res, next) => {
   })
 };
 
-const get = (req, res) => {
-  if (res.todo) {
-    res.json(res.todo);
-  }
-  res.status(404).end()
-};
-
 const preload = (req, res, next) => {
   if (req.params.todoId) {
     return Todo.findById(req.params.todoId).then((data) => {
@@ -25,9 +18,17 @@ const preload = (req, res, next) => {
     }).catch((err) => {
       return next(err);
     });
-  } else {
-    next();
   }
+  res.json(400);
+  res.end();
+};
+
+const get = (req, res) => {
+  if (res.todo) {
+    return res.json(200, res.todo);
+  }
+  res.json(400);
+  res.end();
 };
 
 const put = (req, res, next) => {
@@ -38,7 +39,8 @@ const put = (req, res, next) => {
       return next(err);
     });
   }
-  res.status(404).end()
+  res.json(400);
+  res.end();
 };
 
 const post = (req, res, next) => {
@@ -57,7 +59,8 @@ const del = (req, res, next) => {
       return next(err);
     });
   }
-  res.status(404).end();
+  res.json(400);
+  res.end();
 };
 
 module.exports = {
