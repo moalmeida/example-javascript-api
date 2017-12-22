@@ -7,12 +7,11 @@ describe("service/count unit test", () => {
     const result = 0;
     count.__set__({
       cache: {
-        instance: {
-          get: (name, cb) => {
-            return cb(null, result);
-          },
-          set: (name, value, cb) => {
-            return cb();
+        instance: () => {
+          return {
+            get: (name, cb) => {
+              return cb(null, result);
+            }
           }
         }
       }
@@ -30,9 +29,6 @@ describe("service/count unit test", () => {
           return {
             get: (name, cb) => {
               return cb(message, 0);
-            },
-            set: (name, value, cb) => {
-              return cb(null);
             }
           }
         }
@@ -49,9 +45,6 @@ describe("service/count unit test", () => {
       cache: {
         instance: () => {
           return {
-            get: (name, cb) => {
-              return cb(null, result);
-            },
             set: (name, value, cb) => {
               return cb();
             }
@@ -70,18 +63,15 @@ describe("service/count unit test", () => {
       cache: {
         instance: () => {
           return {
-            get: (name, cb) => {
-              return cb(null, result);
-            },
             set: (name, value, cb) => {
-              return cb(value);
+              return cb(null, value);
             }
           }
         }
       }
     });
     count.set(result).then((v) => {
-      expect(v).toBe(result + 1);
+      expect(v).toBe(result);
     });
   });
 
@@ -113,7 +103,7 @@ describe("service/count unit test", () => {
               return cb(null, result);
             },
             set: (name, value, cb) => {
-              return cb(value);
+              return cb();
             }
           }
         }
@@ -134,7 +124,7 @@ describe("service/count unit test", () => {
               return cb(null, result);
             },
             set: (name, value, cb) => {
-              return cb(value);
+              return cb();
             }
           }
         }
@@ -153,9 +143,6 @@ describe("service/count unit test", () => {
           return {
             get: (name, cb) => {
               return cb(message, 0);
-            },
-            set: (name, value, cb) => {
-              return cb(value);
             }
           }
         }

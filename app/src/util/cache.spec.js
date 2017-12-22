@@ -20,7 +20,6 @@ describe("util/cache unit test", () => {
         }
       }
     });
-
     expect(cache.instance()).toBeDefined();
   });
 

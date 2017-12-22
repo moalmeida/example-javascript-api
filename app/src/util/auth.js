@@ -2,10 +2,11 @@
 
 let passport = require("passport");
 let jwt = require("passport-jwt");
+const token_seed = process.env.TOKEN_SEED || '_example';
 
 const init = () => {
   passport.use(new jwt.Strategy({
-    secretOrKey: "_example",
+    secretOrKey: token_seed,
     jwtFromRequest: jwt.ExtractJwt.fromAuthHeaderAsBearerToken()
   }, (payload, cb) => {
     return cb(null, payload);

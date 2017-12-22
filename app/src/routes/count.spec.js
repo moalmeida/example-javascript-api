@@ -5,7 +5,7 @@ var count = rewire("./count");
 describe("routes/count unit test", () => {
 
   it("should incremental() without error", () => {
-    var req = () => {};
+    var req = {};
     var res = {
       json: (data) => {
         expect(data).toBe(0);
@@ -38,7 +38,7 @@ describe("routes/count unit test", () => {
 
   it("should incremental() with exception", () => {
     const message = "ERROR";
-    const req = () => {};
+    const req = {};
     const next = (err) => {
       expect(err).toBe(message);
       return;

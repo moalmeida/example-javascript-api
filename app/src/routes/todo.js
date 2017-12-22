@@ -52,12 +52,12 @@ const post = (req, res, next) => {
 const del = (req, res, next) => {
   if (res.todo) {
     return Todo.remove(res.todo).then(() => {
-      res.json(204, {});
+      res.status(204).end();
     }).catch((err) => {
       return next(err);
     });
   }
-  res.status(404).end()
+  res.status(404).end();
 };
 
 module.exports = {

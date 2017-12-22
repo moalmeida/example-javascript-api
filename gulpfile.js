@@ -1,4 +1,3 @@
-/* eslint no-console: ["error", { allow: ["warn", "error"] }] */
 
 'use strict';
 
@@ -17,7 +16,7 @@ gulp.task('lint', () => {
 });
 
 gulp.task('istabul-hook', () => {
-  return gulp.src(['app/**/*.js', '!app/app.js', '!app/index.js', '!app/**/*.spec.js'])
+  return gulp.src(['app/**/*.js', '!app/**/app.js', '!app/**/index.js', '!app/**/*.spec.js'])
     .pipe(istanbul({
       includeUntested: true,
     }))
