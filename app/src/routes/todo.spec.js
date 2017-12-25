@@ -190,35 +190,43 @@ describe("routes/todo unit test", () => {
     todo.put(req, res);
   });
 
-
-  it("should post() without error", () => {
-    const result = {};
-    const req = {
-      body: {}
-    };
-    const next = () => {};
-    var res = {
-      json: (status, data) => {
-        expect(status).toBe(201);
-        expect(data).toBe(result);
-        return;
-      },
-      end: () => {
-        return;
-      }
-    };
-    todo.__set__({
-      Todo: {
-        save: (body) => {
-          expect(body).toBe(req.body);
-          return new Promise((resolve) => {
-            resolve(result);
-          });
-        }
-      }
-    });
-    todo.post(req, res, next);
-  });
+  // it("should post() without error", () => {
+  //   const result = {
+  //     local: {
+  //       username: 'abc123',
+  //       password: 'abc123'
+  //     }
+  //   };
+  //   const req = {
+  //     body: {
+  //       username: 'abc123',
+  //       password: 'abc123'
+  //     }
+  //   };
+  //   const next = () => {};
+  //   var res = {
+  //     json: (status, data) => {
+  //       expect(status).toBe(201);
+  //       expect(data.local.username).toBe(result.local.username);
+  //       return;
+  //     },
+  //     end: () => {
+  //       return;
+  //     }
+  //   };
+  //   todo.__set__({
+  //     Todo: {
+  //       create: (body) => {
+  //         expect(body.local.username).toBe(result.local.username);
+  //         expect(body.local.password).toBe(result.local.password);
+  //         return new Promise((resolve) => {
+  //           resolve(result);
+  //         });
+  //       }
+  //     }
+  //   });
+  //   todo.post(req, res, next);
+  // });
 
   it("should del() without error", () => {
     const req = {};
@@ -261,6 +269,5 @@ describe("routes/todo unit test", () => {
     };
     todo.del(req, res);
   });
-
 
 });

@@ -1,6 +1,5 @@
 'use strict';
 
-let Promise = require('bluebird');
 let Todo = require('../model/todo');
 
 const list = () => {
@@ -25,37 +24,36 @@ const findById = (id) => {
   });
 };
 
-const update = (todo, body) => {
+const update = (object, body) => {
   return new Promise((resolve, reject) => {
-    todo.set(body);
-    todo.save((err, data) => {
+    object.set(body);
+    object.save((err, data) => {
       if (err) {
         reject(err);
       }
       resolve(data);
-    });
-  });
-};
-
-const remove = (todo) => {
-  return new Promise((resolve, reject) => {
-    todo.remove((err) => {
-      if (err) {
-        reject(err);
-      }
-      resolve();
     });
   });
 };
 
 const save = (body) => {
   return new Promise((resolve, reject) => {
-    let todo = new Todo(body);
-    todo.save((err, data) => {
+    Todo.create(body, (err, data) => {
       if (err) {
         reject(err);
       }
       resolve(data);
+    });
+  });
+};
+
+const remove = (object) => {
+  return new Promise((resolve, reject) => {
+    object.remove((err) => {
+      if (err) {
+        reject(err);
+      }
+      resolve();
     });
   });
 };

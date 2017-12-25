@@ -1,11 +1,11 @@
 'use strict';
 
-let Promise = require('bluebird');
-let User = require('../model/user');
+let Auth = require('../model/auth');
+let crypt = require('../util/crypt');
 
 const list = () => {
   return new Promise((resolve, reject) => {
-    return User.find({}, (err, data) => {
+    return Auth.find({}, (err, data) => {
       if (err) {
         reject(err);
       }
@@ -16,13 +16,13 @@ const list = () => {
 
 const load = (username, password) => {
   return new Promise((resolve, reject) => {
-    return User.findOne({
+    return Auth.findOne({
       'local.username': username
     }, (err, data) => {
       if (err) {
         reject(err);
       }
-      if (data && data.local.username === username && data.validPassword(password, data.local.password)) {
+      if (data && data.local.username === username && crypt.validateHash(password, data.local.password)) {
         resolve(data);
       }
       reject();
@@ -32,25 +32,23 @@ const load = (username, password) => {
 
 const isValid = (username) => {
   return new Promise((resolve, reject) => {
-    return User.findOne({
+    return Auth.findOne({
       'local.username': username
     }, (err, data) => {
       if (err) {
         reject(err);
       }
       if (data && data.local.username === username) {
-        resolve();
+        resolve(data);
       }
-      reject();
+      reject(new Error("auth not found"));
     });
   });
 };
 
-const save = (username, password) => {
+const save = (body) => {
   return new Promise((resolve, reject) => {
-    let user = new User({'local.username': username});
-    user.local.password = user.generateHash(password);
-    user.save((err, data) => {
+    return Auth.create(body, (err, data) => {
       if (err) {
         reject(err);
       }

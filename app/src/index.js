@@ -18,8 +18,8 @@ const authRoute = require('./routes/auth');
 const healthcheckRoute = require('./routes/healthcheck');
 
 app.get('/healthcheck', version('1.x.x'), healthcheckRoute.get);
-app.post('/authenticate', version('1.x.x'), authRoute.authenticate);
-app.post('/signup', version('1.x.x'), authRoute.signup);
+app.post('/auth/authenticate', version('1.x.x'), authRoute.authenticate);
+app.post('/auth/signup', version('1.x.x'), authRoute.signup);
 
 app.get('/todos', version('1.x.x'), auth.authenticate(), todoRoute.list);
 app.get('/todo/:todoId', version('1.x.x'), auth.authenticate(), todoRoute.preload, todoRoute.get);

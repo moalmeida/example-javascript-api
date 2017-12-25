@@ -1,7 +1,7 @@
 'use strict';
 
 let jwt = require('jsonwebtoken');
-let User = require('../service/user');
+let auth = require('../service/auth');
 const token_seed = process.env.TOKEN_SEED || '_example';
 
 const signup = (req, res, next) => {
@@ -10,7 +10,13 @@ const signup = (req, res, next) => {
   if (!username || !password) {
     return next(new Error("invalid signup form"));
   }
-  return User.save(username, password).then((data) => {
+  let object = {
+    local: {
+      username: username,
+      password: password
+    }
+  }
+  return auth.save(object).then((data) => {
     res.status(201).json(data);
   }).catch(err => {
     next(err)
@@ -23,7 +29,7 @@ const authenticate = (req, res, next) => {
   if (!username || !password) {
     return next(new Error("invalid authenticate form"));
   }
-  return User.load(username, password).then((data) => {
+  return auth.load(username, password).then((data) => {
     if (data) {
       const payload = {
         username: data.local.username

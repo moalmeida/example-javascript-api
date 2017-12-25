@@ -44,7 +44,15 @@ const put = (req, res, next) => {
 };
 
 const post = (req, res, next) => {
-  return Todo.save(req.body).then((data) => {
+  const username = req.body.username;
+  const password = req.body.password;
+  const object = {
+    local: {
+      username: username,
+      password: password
+    }
+  }
+  return Todo.save(object).then((data) => {
     res.json(201, data);
   }).catch((err) => {
     return next(err);
