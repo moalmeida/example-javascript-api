@@ -5,9 +5,11 @@ var auth = rewire("./auth");
 describe("routes/auth unit test", () => {
 
   it("should signup() without error", () => {
-    // const result = {
-    //   usename: 'abc123'
-    // };
+    const result = {
+      local: {
+        username: 'abc123'
+      }
+    };
     const req = {
       body: {
         username: 'abc123',
@@ -28,10 +30,10 @@ describe("routes/auth unit test", () => {
     auth.__set__({
       auth: {
         save: (body) => {
-          expect(body.local.username).toBe(req.body.username);
-          expect(body.local.password).toBe(req.body.password);
+          expect(body.username).toBe(req.body.username);
+          expect(body.password).toBe(req.body.password);
           return new Promise((resolve) => {
-            resolve(body);
+            resolve(result);
           })
         }
       }
@@ -41,7 +43,9 @@ describe("routes/auth unit test", () => {
 
   it("should authenticate() without error", () => {
     const result = {
-      usename: 'abc123'
+      local: {
+        username: 'abc123'
+      }
     };
     const req = {
       body: {
@@ -55,7 +59,8 @@ describe("routes/auth unit test", () => {
         return;
       },
       json: (res) => {
-        expect(res).toBe(result);
+        expect(res.local.username).toBe(result.local.username);
+        expect(res.token).toBeDefined();
         return;
       }
     };

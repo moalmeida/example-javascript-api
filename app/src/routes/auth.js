@@ -11,10 +11,8 @@ const signup = (req, res, next) => {
     return next(new Error("invalid signup form"));
   }
   let object = {
-    local: {
-      username: username,
-      password: password
-    }
+    username: username,
+    password: password
   }
   return auth.save(object).then((data) => {
     res.status(201).json(data);
@@ -32,7 +30,9 @@ const authenticate = (req, res, next) => {
   return auth.load(username, password).then((data) => {
     if (data) {
       const payload = {
-        username: data.local.username
+        local: {
+          username: data.local.username
+        }
       };
       const token = jwt.sign(payload, token_seed, {
         expiresIn: 60 * 60

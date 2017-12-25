@@ -1,7 +1,7 @@
 'use strict';
 
-let Auth = require('../model/auth');
 let crypt = require('../util/crypt');
+let Auth = require('../model/auth');
 
 const list = () => {
   return new Promise((resolve, reject) => {
@@ -47,8 +47,12 @@ const isValid = (username) => {
 };
 
 const save = (body) => {
+  let object = body;
+  if (object && object.local) {
+    object.local.password = crypt.generateHash(object.local.password)
+  }
   return new Promise((resolve, reject) => {
-    return Auth.create(body, (err, data) => {
+    return Auth.create(object, (err, data) => {
       if (err) {
         reject(err);
       }

@@ -105,36 +105,44 @@ describe("service/auth unit test", () => {
     });
   });
 
-  // it("should save() without error", () => {
-  //   const username = 'abc123';
-  //   const password = 'abc123';
-  //   auth.__set__({
-  //     Auth: {
-  //       save: (options, cb) => {
-  //         return cb(null, options);
-  //       }
-  //     }
-  //   });
-  //   auth.save(username, password).then((v) => {
-  //     expect(v.local.username).toBe(username);
-  //     expect(v).toBeDefined();
-  //   });
-  // });
+  it("should save() without error", () => {
+    const object = {
+      local: {
+        username: 'abc123',
+        password: 'abc123'
+      }
+    }
+    auth.__set__({
+      Auth: {
+        create: (options, cb) => {
+          return cb(null, options);
+        }
+      }
+    });
+    auth.save(object).then((v) => {
+      expect(v.local.username).toBe(object.local.username);
+      // expect(v.local.password).not.toBe(object.local.password);
+    });
+  });
 
-  // it("should save() with error", () => {
-  //   const message = "ERROR";
-  //   const username = 'abc123';
-  //   const password = 'abc123';
-  //   auth.__set__({
-  //     Auth: {
-  //       create: (options, cb) => {
-  //         return cb(message, null);
-  //       }
-  //     }
-  //   });
-  //   auth.save(username, password).catch((v) => {
-  //     expect(v).toBe(message);
-  //   });
-  // });
+  it("should save() with error", () => {
+    const message = "ERROR";
+    const object = {
+      local: {
+        username: 'abc123',
+        password: 'abc123'
+      }
+    }
+    auth.__set__({
+      Auth: {
+        create: (options, cb) => {
+          return cb(message, null);
+        }
+      }
+    });
+    auth.save(object).catch((v) => {
+      expect(v).toBe(message);
+    });
+  });
 
 });
