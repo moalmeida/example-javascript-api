@@ -28,14 +28,14 @@ pipeline {
 
       stage('Unit Test') {
         steps {
-          env.NODE_ENV = "test"
+          // env.NODE_ENV = "test"
           sh 'npm test'
         }
       }
 
       stage('Integration Test') {
         steps {
-          env.NODE_ENV = "test"
+          // env.NODE_ENV = "test"
           sh 'echo ""'
         }
       }
