@@ -4,7 +4,7 @@ pipeline {
 
   agent any
   
-  env.NODE_ENV = "test"
+  // env.NODE_ENV = "test"
   
   tools { nodejs 'node8' }
   
@@ -29,7 +29,6 @@ pipeline {
       }
 
       stage('Unit Test') {
-        
         steps {
           sh 'npm test'
         }
