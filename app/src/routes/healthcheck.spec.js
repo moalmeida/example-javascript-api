@@ -17,7 +17,7 @@ describe("routes/healthcheck unit test", () => {
     };
     healthcheck.__set__({
       Todo: {
-        get: () => {
+        list: () => {
           return new Promise((resolve) => {
             resolve(todos);
           });

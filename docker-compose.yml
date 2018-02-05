@@ -1,5 +1,17 @@
 version: '2'
 services:
+  proxy:
+    image: traefik
+    command: --api --docker --docker.watch=true --docker.exposedbydefault=false --docker.domain=localhost --logLevel=WARN
+    # labels:
+    #  - "traefik.enable=true"
+    ports:
+      - 80:80
+      - 8080:8080
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      # - /dev/null:/traefik.toml
   cache:
     restart: always
     image: redis:3-alpine
@@ -22,6 +34,10 @@ services:
   api:
     restart: always
     build: .
+    labels:
+     - "traefik.enable=true"
+     - "traefik.backend=api.example"
+     - "traefik.frontend.rule=Host:api.example"
     environment:
      - PORT=8888
      - NODE_ENV=development
