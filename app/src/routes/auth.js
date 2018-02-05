@@ -11,8 +11,10 @@ const signup = (req, res, next) => {
     return next(new Error("invalid signup form"));
   }
   let object = {
-    username: username,
-    password: password
+    local: {
+      username: username,
+      password: password
+    }
   }
   return auth.save(object).then((data) => {
     res.status(201).json(data);

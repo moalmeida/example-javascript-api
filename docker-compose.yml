@@ -3,15 +3,16 @@ services:
   proxy:
     image: traefik
     command: --api --docker --docker.watch=true --docker.exposedbydefault=false --docker.domain=localhost --logLevel=WARN
-    # labels:
-    #  - "traefik.enable=true"
     ports:
-      - 80:80
-      - 8080:8080
-      - 443:443
+     - 80:80
+     - 8080:8080
+     - 443:443
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      # - /dev/null:/traefik.toml
+     - /var/run/docker.sock:/var/run/docker.sock
+     - /dev/null:/traefik.toml
+    networks:
+     - frontend
+     - backend
   cache:
     restart: always
     image: redis:3-alpine
@@ -21,6 +22,8 @@ services:
      - 6379
     ports:
      - 6379
+    networks:
+     - backend
   nosql:
     restart: always
     image: moalmeida/docker-mongo:0.0.0
@@ -31,13 +34,15 @@ services:
      - 27017
     ports:
      - 27017
+    networks:
+     - backend
   api:
     restart: always
     build: .
     labels:
      - "traefik.enable=true"
-     - "traefik.backend=api.example"
-     - "traefik.frontend.rule=Host:api.example"
+     - "traefik.backend=api.example.localhost"
+     - "traefik.frontend.rule=Host:api.example.localhost"
     environment:
      - PORT=8888
      - NODE_ENV=development
@@ -49,14 +54,27 @@ services:
     expose:
      - 8888
     ports:
-     - 8888:8888
+     - 8888
     depends_on:
      - cache
      - nosql
     links:
      - cache
      - nosql
+    networks:
+     - backend
     privileged: true
 volumes:
   nosql_data: {}
   cache_data: {}
+networks:
+  frontend:
+        external: true
+        # driver: bridge
+        # driver_opts:
+        #   com.docker.network.enable_ipv6: "true"
+  backend:
+        external: true
+        # driver: bridge
+        # driver_opts:
+        #   com.docker.network.enable_ipv6: "true"

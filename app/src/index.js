@@ -24,7 +24,7 @@ app.post('/auth/signup', version('1.x.x'), authRoute.signup);
 app.get('/todos', version('1.x.x'), auth.authenticate(), todoRoute.list);
 app.get('/todo/:todoId', version('1.x.x'), auth.authenticate(), todoRoute.preload, todoRoute.get);
 app.put('/todo/:todoId', version('1.x.x'), auth.authenticate(), todoRoute.preload, todoRoute.put);
-app.del('/todo/:todoId', version('1.x.x'), auth.authenticate(), todoRoute.preload, todoRoute.del);
+app.delete('/todo/:todoId', version('1.x.x'), auth.authenticate(), todoRoute.preload, todoRoute.del);
 app.post('/todo', version('1.x.x'), auth.authenticate(), todoRoute.post);
 app.get('/count/incremental', version('1.x.x'), auth.authenticate(), countRoute.incremental);
 
