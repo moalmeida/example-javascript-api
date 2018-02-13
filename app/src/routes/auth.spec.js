@@ -22,7 +22,7 @@ describe("routes/auth unit test", () => {
         return;
       },
       json: (res) => {
-        expect(res.local.username).toBe(req.body.username);
+        expect(res.local.username).toBe(result.local.username);
         return;
       }
     };
@@ -30,8 +30,8 @@ describe("routes/auth unit test", () => {
     auth.__set__({
       auth: {
         save: (body) => {
-          expect(body.username).toBe(req.body.username);
-          expect(body.password).toBe(req.body.password);
+          expect(body.local.username).toBe(req.body.username);
+          expect(body.local.password).toBe(req.body.password);
           return new Promise((resolve) => {
             resolve(result);
           })
