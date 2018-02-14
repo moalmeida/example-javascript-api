@@ -1,18 +1,5 @@
-version: '2'
+version: '3.3'
 services:
-  proxy:
-    image: traefik
-    command: --api --docker --docker.watch=true --docker.exposedbydefault=false --docker.domain=localhost --logLevel=WARN
-    ports:
-     - 80:80
-     - 8080:8080
-     - 443:443
-    volumes:
-     - /var/run/docker.sock:/var/run/docker.sock
-     - /dev/null:/traefik.toml
-    networks:
-     - frontend
-     - backend
   cache:
     restart: always
     image: redis:3-alpine
@@ -22,8 +9,13 @@ services:
      - 6379
     ports:
      - 6379
+    labels:
+     - "traefik.enable=true"
+     - "traefik.backend=cache.example"
+     - "traefik.domain=localhost"
+     - "traefik.frontend.rule=Host:cache.example.localhost"
     networks:
-     - backend
+     - example
   nosql:
     restart: always
     image: moalmeida/docker-mongo:0.0.0
@@ -34,15 +26,16 @@ services:
      - 27017
     ports:
      - 27017
+    labels:
+     - "traefik.enable=true"
+     - "traefik.backend=nosql.example"
+     - "traefik.domain=localhost"
+     - "traefik.frontend.rule=Host:nosql.example.localhost"
     networks:
-     - backend
+     - example
   api:
     restart: always
     build: .
-    labels:
-     - "traefik.enable=true"
-     - "traefik.backend=api.example.localhost"
-     - "traefik.frontend.rule=Host:api.example.localhost"
     environment:
      - PORT=8888
      - NODE_ENV=development
@@ -61,20 +54,17 @@ services:
     links:
      - cache
      - nosql
+    labels:
+     - "traefik.enable=true"
+     - "traefik.backend=api.example"
+     - "traefik.domain=localhost"
+     - "traefik.frontend.rule=Host:api.example.localhost"
     networks:
-     - backend
+     - example
     privileged: true
 volumes:
   nosql_data: {}
   cache_data: {}
 networks:
-  frontend:
+  example:
         external: true
-        # driver: bridge
-        # driver_opts:
-        #   com.docker.network.enable_ipv6: "true"
-  backend:
-        external: true
-        # driver: bridge
-        # driver_opts:
-        #   com.docker.network.enable_ipv6: "true"
