@@ -2,6 +2,7 @@
 pipeline {
   agent any
   tools { nodejs 'node8' }
+  triggers { pollSCM('* * * * *') }
   stages {
       stage('Checkout') {
         steps {
